@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .button {
+    @apply text-white py-2 px-4 shadow-sm rounded-lg uppercase font-semibold tracking-wide;
+  }
+
+  .button--action {
+    @apply transition duration-200 bg-navy-lighter transform hover:-translate-y-1 hover:bg-navy-light;
+  }
+}
