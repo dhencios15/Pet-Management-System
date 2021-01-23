@@ -16,8 +16,8 @@ export const createPet = async (req: Request, res: Response) => {
 export const getAllPets = async (req: Request, res: Response) => {
   try {
     const allPets = await Pet.find({
-      order: { createAt: 'DESC' },
-      relations: ['OwnerId'],
+      order: { IsActive: 1, createAt: 'DESC' },
+      relations: ['PetOwnerID'],
     });
     return res.json(allPets);
   } catch (error) {
