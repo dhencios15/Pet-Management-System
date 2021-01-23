@@ -5,7 +5,7 @@ const BaseInput: FC = () => {
     <input
       type='text'
       placeholder='Search...'
-      className='w-72 py-2 px-4 rounded-lg border-transparent focus:outline-none'
+      className='w-72 py-2 px-4 rounded-lg border-transparent focus:outline-none focus:ring focus:ring-navy-lighter'
     />
   );
 };

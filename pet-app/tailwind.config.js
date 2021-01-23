@@ -1,9 +1,12 @@
+const colors = require('tailwindcss/colors');
+
 module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
       colors: {
+        fucshia: colors.fuchsia,
         navy: {
           base: '#0a192f',
           light: '#172a45',
@@ -48,6 +51,9 @@ module.exports = {
         45: '45deg',
         90: '90deg',
         180: '180deg',
+      },
+      screens: {
+        ip5: '320px',
       },
     },
   },

@@ -1,5 +1,5 @@
 const OwnerCard = () => {
-  return <div></div>;
+  return <div className='text-white'>HELLO</div>;
 };
 
 export default OwnerCard;
