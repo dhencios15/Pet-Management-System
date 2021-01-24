@@ -21,3 +21,7 @@ export interface IOwner {
   IsActive: string;
   OwnerPets: IPet[];
 }
+
+export interface IPetType {
+  petType: string;
+}

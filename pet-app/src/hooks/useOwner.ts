@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
 import axios from 'axios';
-import { IOwner } from 'services/types';
+import { IOwner } from 'helpers/types';
 
 export function useOwner() {
   return useQuery(

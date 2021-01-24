@@ -4,6 +4,7 @@ import { usePets } from 'hooks/usePets';
 
 const PetContainer = () => {
   const { data, isLoading } = usePets();
+
   return isLoading ? (
     <div className='my-10 flex justify-center items-center'>
       <Loader type='Grid' color='#00BFFF' height={80} width={80} />

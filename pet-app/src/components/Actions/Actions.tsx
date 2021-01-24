@@ -1,16 +1,35 @@
-import { BaseButton, BaseInput } from 'components/SharedComponents';
+import * as React from 'react';
 import { PlusCircle } from 'phosphor-react';
 import { NavLink } from 'react-router-dom';
+import Modal from 'react-modal';
+
+import { useModal } from 'hooks/useModal';
+import { PetForm } from 'components/FormComponents';
+import { BaseButton, BaseInput } from 'components/SharedComponents';
+import { selectBreedByType } from 'helpers/formatDisplay';
 
 const Actions = () => {
+  const { closeModal, modalIsOpen, openModal } = useModal();
+  const [petBreeds, setPetBreeds] = React.useState<string[]>([]);
+
+  const onSelectType = React.useCallback((type) => {
+    let breeds = selectBreedByType(type);
+    setPetBreeds(breeds);
+  }, []);
+
   return (
-    <div className='flex md:flex-row justify-between flex-col p-4 items-center md:space-x-4'>
+    <div className='flex lg:flex-row justify-between flex-col p-4 items-center md:space-x-4'>
       <div className='flex items-center space-x-4 mb-2'>
         <BaseButton handleAction={() => console.log('HELLO')}>
           <PlusCircle size={26} />
           <span>owner</span>
         </BaseButton>
-        <BaseButton handleAction={() => console.log('HELLO')}>
+        <BaseButton
+          handleAction={() => {
+            openModal();
+            onSelectType('Dog');
+          }}
+        >
           <PlusCircle size={26} />
           <span>pet</span>
         </BaseButton>
@@ -36,6 +55,22 @@ const Actions = () => {
           OWNERS VIEW
         </NavLink>
       </div>
+
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel='PET MODAL'
+        className='mymodal'
+        overlayClassName='myoverlay'
+        closeTimeoutMS={500}
+      >
+        <PetForm
+          petBreeds={petBreeds}
+          closeModal={closeModal}
+          onSelectType={onSelectType}
+          isEditting={false}
+        />
+      </Modal>
     </div>
   );
 };

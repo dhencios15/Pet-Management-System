@@ -1,25 +1,57 @@
+import * as React from 'react';
+import Modal from 'react-modal';
+
 import {
   displayPetPicture,
   formatDate,
   formatOwnerName,
+  selectBreedByType,
 } from 'helpers/formatDisplay';
 import { IoMdFemale, IoMdMale } from 'react-icons/io';
-import { IPet } from 'services/types';
+import { IPet } from 'helpers/types';
+import { useModal } from 'hooks/useModal';
+import { PetForm } from 'components/FormComponents';
 
 interface IPetCard {
   pet: IPet;
 }
 
 const PetCard = ({ pet }: IPetCard) => {
+  const { closeModal, modalIsOpen, openModal } = useModal();
+  const [selectedPet, setSelectedPed] = React.useState<IPet | null>(null);
+  const [petBdate, selectPetBdate] = React.useState<Date>(new Date());
+  const [petBreeds, setPetBreeds] = React.useState<string[]>([]);
+  const [petEdit, setPetEdit] = React.useState(false);
+
+  const onSelectPet = (pet: IPet) => {
+    setPetEdit(true);
+    let breeds = selectBreedByType(pet.PetType);
+    openModal();
+    setSelectedPed(pet);
+    selectPetBdate(pet.PetBdate);
+    setPetBreeds(breeds);
+  };
+
+  const onSelectType = React.useCallback((type) => {
+    let breeds = selectBreedByType(type);
+    setPetBreeds(breeds);
+  }, []);
+
+  const onCloseModal = () => {
+    closeModal();
+    setPetEdit(false);
+  };
+
   return (
     <div
-      className={`transition duration-200 transform hover:scale-105 border border-navy-lighter shadow-xl  rounded-lg p-2 flex space-x-4 ${
+      className={`transition duration-200 transform hover:scale-105 border border-navy-lighter shadow-xl rounded-lg p-2 flex space-x-4 ${
         pet.IsActive === 'No' ? 'opacity-30' : 'bg-navy-light'
       }`}
     >
       <div className='bg-gradient-to-tr from-yellow-400 to-fucshia-600 p-1 rounded-full flex-shrink-0 w-24 h-24'>
         <div className='transform block bg-white p-1 rounded-full w-full h-full hover:-rotate-6 cursor-pointer'>
           <img
+            onClick={() => onSelectPet(pet)}
             className='object-cover object-center rounded-full w-full h-full'
             src={`${displayPetPicture(pet.PetType, pet.PetID)}`}
             alt='dog'
@@ -51,6 +83,23 @@ const PetCard = ({ pet }: IPetCard) => {
           </h3>
         </div>
       </div>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel='PET MODAL'
+        className='mymodal'
+        overlayClassName='myoverlay'
+        closeTimeoutMS={500}
+      >
+        <PetForm
+          petBreeds={petBreeds}
+          selectedPet={selectedPet}
+          closeModal={onCloseModal}
+          petBdate={petBdate}
+          onSelectType={onSelectType}
+          isEditting={petEdit}
+        />
+      </Modal>
     </div>
   );
 };
