@@ -34,7 +34,8 @@
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "typescript": "^4.0.3",
     "web-vitals": "^0.2.4",
-    "yup": "^0.32.8"
+    "yup": "^0.32.8",
+    "yup-phone": "^1.2.19"
   },
   "scripts": {
     "start": "craco start",

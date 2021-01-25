@@ -4,23 +4,49 @@ import { NavLink } from 'react-router-dom';
 import Modal from 'react-modal';
 
 import { useModal } from 'hooks/useModal';
-import { PetForm } from 'components/FormComponents';
+import { PetForm, OwnerForm } from 'components/FormComponents';
 import { BaseButton, BaseInput } from 'components/SharedComponents';
 import { selectBreedByType } from 'helpers/formatDisplay';
 
 const Actions = () => {
   const { closeModal, modalIsOpen, openModal } = useModal();
   const [petBreeds, setPetBreeds] = React.useState<string[]>([]);
-
+  const [selectedModal, setSelectedModal] = React.useState('');
   const onSelectType = React.useCallback((type) => {
     let breeds = selectBreedByType(type);
     setPetBreeds(breeds);
   }, []);
 
+  // const opemModal = ({})
+
+  const FormModal = () => {
+    console.log(selectedModal);
+    if (selectedModal === 'owner') {
+      return <OwnerForm closeModal={closeModal} isEditting={false} />;
+    } else if (selectedModal === 'pet') {
+      return (
+        <PetForm
+          petBreeds={petBreeds}
+          closeModal={closeModal}
+          onSelectType={onSelectType}
+          isEditting={false}
+        />
+      );
+    } else {
+      return null;
+    }
+  };
+
   return (
     <div className='flex lg:flex-row justify-between flex-col p-4 items-center md:space-x-4'>
       <div className='flex items-center space-x-4 mb-2'>
-        <BaseButton handleAction={() => console.log('HELLO')}>
+        <BaseButton
+          handleAction={() => {
+            openModal();
+            onSelectType('Dog');
+            setSelectedModal('owner');
+          }}
+        >
           <PlusCircle size={26} />
           <span>owner</span>
         </BaseButton>
@@ -28,6 +54,7 @@ const Actions = () => {
           handleAction={() => {
             openModal();
             onSelectType('Dog');
+            setSelectedModal('pet');
           }}
         >
           <PlusCircle size={26} />
@@ -64,12 +91,7 @@ const Actions = () => {
         overlayClassName='myoverlay'
         closeTimeoutMS={500}
       >
-        <PetForm
-          petBreeds={petBreeds}
-          closeModal={closeModal}
-          onSelectType={onSelectType}
-          isEditting={false}
-        />
+        {FormModal()}
       </Modal>
     </div>
   );
