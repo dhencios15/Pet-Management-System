@@ -57,12 +57,11 @@ const PetForm = ({
       <h1 className='text-center text-white font-bold tracking-widest text-xl mb-2'>
         PET DETAILS {selectedPet && `ID: ${selectedPet?.PetID}`}
       </h1>
-      {mutation.isError ||
-        (mutationUpdate.isError && (
-          <p className='text-center text-sm text-hot-pink'>
-            Pet name is already taken
-          </p>
-        ))}
+      {(mutation.isError || mutationUpdate.isError) && (
+        <p className='text-center text-sm text-hot-pink'>
+          Pet name is already taken
+        </p>
+      )}
       <form
         onSubmit={handleSubmit(onSubmit)}
         className='flex flex-col justify-center items-center space-y-2'

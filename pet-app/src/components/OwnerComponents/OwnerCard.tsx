@@ -7,7 +7,7 @@ import { IOwner, IPet } from 'helpers/types';
 import { useModal } from 'hooks/useModal';
 
 import 'assets/styles.css';
-import { PetForm } from 'components/FormComponents';
+import { OwnerForm, PetForm } from 'components/FormComponents';
 import { OwnerPetList } from '.';
 
 Modal.setAppElement('#root');
@@ -19,11 +19,15 @@ interface IOwnerCard {
 const OwnerCard = ({ owner }: IOwnerCard) => {
   const { closeModal, modalIsOpen, openModal } = useModal();
   const [selectedPet, setSelectedPed] = React.useState<IPet | null>(null);
+  const [selectedOwner, setSelectedOwner] = React.useState<IOwner | null>(null);
   const [petBdate, selectPetBdate] = React.useState<Date>(new Date());
   const [petBreeds, setPetBreeds] = React.useState<string[]>([]);
   const [petEdit, setPetEdit] = React.useState(false);
+  const [selectedModal, setSelectedModal] = React.useState('');
+  const [ownerEdit, setOwnerEdit] = React.useState(false);
 
   const onSelectPet = (pet: IPet) => {
+    setSelectedModal('pet');
     setPetEdit(true);
     let breeds = selectBreedByType(pet.PetType);
     openModal();
@@ -32,10 +36,42 @@ const OwnerCard = ({ owner }: IOwnerCard) => {
     setPetBreeds(breeds);
   };
 
+  const onSelectOwner = (owner: IOwner) => {
+    setSelectedModal('owner');
+    setOwnerEdit(true);
+    setSelectedOwner(owner);
+    openModal();
+  };
+
   const onSelectType = React.useCallback((type) => {
     let breeds = selectBreedByType(type);
     setPetBreeds(breeds);
   }, []);
+
+  const FormModal = () => {
+    if (selectedModal === 'owner') {
+      return (
+        <OwnerForm
+          selectedOwner={selectedOwner}
+          closeModal={closeModal}
+          isEditting={ownerEdit}
+        />
+      );
+    } else if (selectedModal === 'pet') {
+      return (
+        <PetForm
+          petBreeds={petBreeds}
+          selectedPet={selectedPet}
+          closeModal={closeModal}
+          petBdate={petBdate}
+          onSelectType={onSelectType}
+          isEditting={petEdit}
+        />
+      );
+    } else {
+      return null;
+    }
+  };
 
   return (
     <div
@@ -46,6 +82,7 @@ const OwnerCard = ({ owner }: IOwnerCard) => {
       <div className='bg-gradient-to-tr from-yellow-400 to-fucshia-600 p-1 rounded-xl flex-shrink-0 w-32 h-32'>
         <div className='transform block bg-white p-1 rounded-xl w-full h-full hover:-rotate-6 cursor-pointer'>
           <img
+            onClick={() => onSelectOwner(owner)}
             className='object-cover object-center rounded-xl w-full h-full'
             src={`https://i.pravatar.cc/150?u=${owner.OwnerId}`}
             alt='dog'
@@ -58,10 +95,10 @@ const OwnerCard = ({ owner }: IOwnerCard) => {
             {owner.OwnerName}
           </h1>
         </div>
-        <p className='font-semibold text-xs text-gray-400 mb-1'>
+        <p className='font-semibold text-sm text-gray-400 mb-1'>
           {owner.OwnerId} | {owner.OwnerEmail} | {owner.OwnerMobileNo}
         </p>
-        <p className='font-semibold text-xs text-gray-400 mb-1'>
+        <p className='font-semibold text-sm text-gray-400 mb-1'>
           {owner.OwnerAddress}, {owner.OwnerCity} - {owner.OwnerZip}
         </p>
         <div className='mt-4 border-t border-navy-lighter py-4'>
@@ -75,14 +112,7 @@ const OwnerCard = ({ owner }: IOwnerCard) => {
             overlayClassName='myoverlay'
             closeTimeoutMS={500}
           >
-            <PetForm
-              petBreeds={petBreeds}
-              selectedPet={selectedPet}
-              closeModal={closeModal}
-              petBdate={petBdate}
-              onSelectType={onSelectType}
-              isEditting={petEdit}
-            />
+            {FormModal()}
           </Modal>
         </div>
       </div>

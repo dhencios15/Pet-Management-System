@@ -6,7 +6,7 @@ export const petSchema = yup.object().shape({
   PetOwnerID: yup.number().required('Please select owner'),
   PetName: yup
     .string()
-    .matches(/^[a-zA-Z]+$/, 'Name contains letter only')
+    // .matches(/^[a-zA-Z\s]*$/, 'Name contains letter only')
     .required('Please provide pet name'),
   PetType: yup.string().required('Please provide pet type'),
   PetBreed: yup.string().required('Please provide pet breed'),
@@ -18,7 +18,7 @@ export const petSchema = yup.object().shape({
 export const ownerSchema = yup.object().shape({
   OwnerName: yup
     .string()
-    .matches(/^[a-zA-Z]+$/, 'Name contains letter only')
+    // .matches(/^[a-zA-Z\s]*$/, 'Name contains letter only')
     .required('Please provide name'),
   OwnerAddress: yup.string().required('Please provide address'),
   OwnerCity: yup.string().required('Please provide city'),

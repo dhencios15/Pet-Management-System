@@ -38,6 +38,7 @@ const PetCard = ({ pet }: IPetCard) => {
   }, []);
 
   const onCloseModal = () => {
+    console.log('hello');
     closeModal();
     setPetEdit(false);
   };
@@ -69,7 +70,7 @@ const PetCard = ({ pet }: IPetCard) => {
             <IoMdMale className='w-8 h-8 text-blue-500' />
           )}
         </div>
-        <p className='font-semibold text-xs text-gray-400'>
+        <p className='font-semibold text-sm text-gray-400'>
           {pet.PetID} | {pet.PetType} | {pet.PetBreed} |{' '}
           {formatDate(pet.PetBdate)}
         </p>

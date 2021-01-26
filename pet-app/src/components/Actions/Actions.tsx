@@ -17,10 +17,7 @@ const Actions = () => {
     setPetBreeds(breeds);
   }, []);
 
-  // const opemModal = ({})
-
   const FormModal = () => {
-    console.log(selectedModal);
     if (selectedModal === 'owner') {
       return <OwnerForm closeModal={closeModal} isEditting={false} />;
     } else if (selectedModal === 'pet') {

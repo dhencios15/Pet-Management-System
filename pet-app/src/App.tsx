@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 
 import Actions from 'components/Actions';
 import { PetContainer } from 'components/PetComponents';
@@ -22,6 +23,7 @@ function App() {
           </div>
         </Router>
       </div>
+      <ToastContainer />
     </div>
   );
 }

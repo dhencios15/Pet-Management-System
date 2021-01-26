@@ -2,7 +2,6 @@ import * as React from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
-
 import { IOwner } from 'helpers/types';
 import { ownerSchema } from 'helpers/inputValidation';
 import { BaseButton } from 'components/SharedComponents';
@@ -17,7 +16,6 @@ interface IOwnerForm {
 
 const OwnerForm = ({ selectedOwner, closeModal, isEditting }: IOwnerForm) => {
   const queryClient = useQueryClient();
-  const [hasError, setHasError] = React.useState(false);
   const { register, handleSubmit, errors } = useForm<IOwner>({
     resolver: yupResolver(ownerSchema),
     mode: 'onBlur',
@@ -34,16 +32,12 @@ const OwnerForm = ({ selectedOwner, closeModal, isEditting }: IOwnerForm) => {
 
   React.useEffect(() => {
     if (mutation.isSuccess || mutationUpdate.isSuccess) {
+      console.log('SUCCESS');
       queryClient.invalidateQueries('owners');
       closeModal();
     }
   }, [mutation.isSuccess, queryClient, closeModal, mutationUpdate.isSuccess]);
 
-  React.useEffect(() => {
-    if (mutation.status === 'error') {
-      setHasError(true);
-    }
-  }, [mutation.status]);
   return (
     <>
       <h1 className='text-center text-white font-bold tracking-widest text-xl mb-2'>
@@ -160,4 +154,4 @@ const OwnerForm = ({ selectedOwner, closeModal, isEditting }: IOwnerForm) => {
   );
 };
 
-export default OwnerForm;
+export default React.memo(OwnerForm);
