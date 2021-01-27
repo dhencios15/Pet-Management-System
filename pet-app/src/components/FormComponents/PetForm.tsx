@@ -3,6 +3,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import { useMutation, useQueryClient } from 'react-query';
+import Swal from 'sweetalert2';
+import axios from 'axios';
 
 import { GENDER, PET_TYPE } from 'helpers/constant';
 import { IPet } from 'helpers/types';
@@ -11,7 +13,6 @@ import { BaseButton } from 'components/SharedComponents';
 import 'react-datepicker/dist/react-datepicker.css';
 import { formatOriginalDate } from 'helpers/formatDisplay';
 import { useOwner } from 'hooks/useOwner';
-import axios from 'axios';
 
 interface IPetForm {
   selectedPet?: IPet | null;
@@ -45,12 +46,32 @@ const PetForm = ({
   };
 
   React.useEffect(() => {
-    if (mutation.isSuccess || mutationUpdate.isSuccess) {
+    if (mutation.isSuccess) {
       queryClient.invalidateQueries('pets');
       queryClient.invalidateQueries('owners');
       closeModal();
+      Swal.fire({
+        title: 'Add Success',
+        text: 'New Pet Added Successfully',
+        icon: 'success',
+        confirmButtonText: 'Cool',
+      });
     }
-  }, [mutation.isSuccess, queryClient, closeModal, mutationUpdate.isSuccess]);
+  }, [mutation.isSuccess, queryClient, closeModal]);
+
+  React.useEffect(() => {
+    if (mutationUpdate.isSuccess) {
+      queryClient.invalidateQueries('pets');
+      queryClient.invalidateQueries('owners');
+      closeModal();
+      Swal.fire({
+        title: 'Update Success',
+        text: 'Update Success',
+        icon: 'success',
+        confirmButtonText: 'Cool',
+      });
+    }
+  }, [queryClient, closeModal, mutationUpdate.isSuccess]);
 
   return (
     <>
@@ -96,7 +117,9 @@ const PetForm = ({
           <label className='font-semibold'>PET NAME</label>
           <input
             type='text'
-            className='rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black'
+            className={`rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black ${
+              !!errors?.PetName && 'border-2 border-red-600'
+            }`}
             name='PetName'
             defaultValue={selectedPet?.PetName || ''}
             ref={register}
@@ -179,7 +202,9 @@ const PetForm = ({
         <div className='flex flex-col text-white mx-auto'>
           <label className='font-semibold'>PET NOTES</label>
           <textarea
-            className='rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black'
+            className={`rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black ${
+              !!errors?.PetNotes && 'border-2 border-red-600'
+            }`}
             name='PetNotes'
             defaultValue={selectedPet?.PetNotes || ''}
             ref={register}

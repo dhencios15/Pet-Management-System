@@ -2,11 +2,13 @@ import * as React from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+
 import { IOwner } from 'helpers/types';
 import { ownerSchema } from 'helpers/inputValidation';
 import { BaseButton } from 'components/SharedComponents';
 import 'react-datepicker/dist/react-datepicker.css';
-import axios from 'axios';
 
 interface IOwnerForm {
   selectedOwner?: IOwner | null;
@@ -31,12 +33,30 @@ const OwnerForm = ({ selectedOwner, closeModal, isEditting }: IOwnerForm) => {
   };
 
   React.useEffect(() => {
-    if (mutation.isSuccess || mutationUpdate.isSuccess) {
-      console.log('SUCCESS');
+    if (mutationUpdate.isSuccess) {
       queryClient.invalidateQueries('owners');
       closeModal();
+      Swal.fire({
+        title: 'Update Success',
+        text: 'Update Success',
+        icon: 'success',
+        confirmButtonText: 'Cool',
+      });
     }
-  }, [mutation.isSuccess, queryClient, closeModal, mutationUpdate.isSuccess]);
+  }, [queryClient, closeModal, mutationUpdate.isSuccess]);
+
+  React.useEffect(() => {
+    if (mutation.isSuccess) {
+      queryClient.invalidateQueries('owners');
+      closeModal();
+      Swal.fire({
+        title: 'Add Success',
+        text: 'New Owner Added Successfully',
+        icon: 'success',
+        confirmButtonText: 'Cool',
+      });
+    }
+  }, [mutation.isSuccess, queryClient, closeModal]);
 
   return (
     <>
@@ -56,7 +76,11 @@ const OwnerForm = ({ selectedOwner, closeModal, isEditting }: IOwnerForm) => {
           <label className='font-semibold'>NAME</label>
           <input
             type='text'
-            className='rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black'
+            className={`rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black ${
+              mutation.isError || !!errors?.OwnerName || mutationUpdate.isError
+                ? 'border-2 border-red-600'
+                : ''
+            }`}
             name='OwnerName'
             defaultValue={selectedOwner?.OwnerName || ''}
             ref={register}
@@ -71,7 +95,9 @@ const OwnerForm = ({ selectedOwner, closeModal, isEditting }: IOwnerForm) => {
           <label className='font-semibold'>EMAIL</label>
           <input
             type='email'
-            className='rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black'
+            className={`rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black ${
+              errors?.OwnerEmail && 'border-2 border-red-600'
+            }`}
             name='OwnerEmail'
             defaultValue={selectedOwner?.OwnerEmail || ''}
             ref={register}
@@ -87,7 +113,9 @@ const OwnerForm = ({ selectedOwner, closeModal, isEditting }: IOwnerForm) => {
           <label className='font-semibold'>MOBILE</label>
           <input
             type='text'
-            className='rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black'
+            className={`rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black ${
+              errors?.OwnerMobileNo && 'border-2 border-red-600'
+            } ${errors?.OwnerMobileNo && 'border-2 border-red-600'}`}
             name='OwnerMobileNo'
             defaultValue={selectedOwner?.OwnerMobileNo || ''}
             ref={register}
@@ -102,7 +130,9 @@ const OwnerForm = ({ selectedOwner, closeModal, isEditting }: IOwnerForm) => {
           <label className='font-semibold'>ADDRESS</label>
           <input
             type='text'
-            className='rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black'
+            className={`rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black ${
+              errors?.OwnerAddress && 'border-2 border-red-600'
+            }`}
             name='OwnerAddress'
             defaultValue={selectedOwner?.OwnerAddress || ''}
             ref={register}
@@ -117,7 +147,9 @@ const OwnerForm = ({ selectedOwner, closeModal, isEditting }: IOwnerForm) => {
           <label className='font-semibold'>CITY</label>
           <input
             type='text'
-            className='rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black'
+            className={`rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black ${
+              errors?.OwnerCity && 'border-2 border-red-600'
+            }`}
             name='OwnerCity'
             defaultValue={selectedOwner?.OwnerCity || ''}
             ref={register}
@@ -132,7 +164,9 @@ const OwnerForm = ({ selectedOwner, closeModal, isEditting }: IOwnerForm) => {
           <label className='font-semibold'>ZIP</label>
           <input
             type='text'
-            className='rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black'
+            className={`rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black ${
+              errors?.OwnerZip && 'border-2 border-red-600'
+            }`}
             name='OwnerZip'
             defaultValue={selectedOwner?.OwnerZip || ''}
             ref={register}
