@@ -20,7 +20,7 @@ export default class Owner extends Entity {
   OwnerId: number;
 
   @MinLength(3, { message: 'Name must be at least 3 characters long' })
-  @Column()
+  @Column({ unique: true })
   OwnerName: string;
 
   @Column()
@@ -36,7 +36,7 @@ export default class Owner extends Entity {
   OwnerMobileNo: string;
 
   @IsEmail()
-  @Column()
+  @Column({ unique: true })
   OwnerEmail: string;
 
   @OneToMany(() => Pet, (pet) => pet.PetOwnerID)

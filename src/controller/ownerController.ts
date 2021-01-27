@@ -2,10 +2,22 @@ import { Request, Response } from 'express';
 import Owner from '../entities/Owner';
 
 export const createOwner = async (req: Request, res: Response) => {
+  const { OwnerName, OwnerEmail } = req.body;
   try {
+    // Validate Data
+    let errors: any = {};
+    const ownerName = await Owner.findOne({ OwnerName });
+    const ownerEmail = await Owner.findOne({ OwnerEmail });
+
+    if (ownerName) errors.PetName = 'Owner name is already taken';
+    if (ownerEmail) errors.OwnerEmail = 'Email is already taken';
+
+    if (Object.keys(errors).length > 0) {
+      return res.status(400).json(errors);
+    }
+
     const newUser = new Owner(req.body);
     await newUser.save();
-
     return res.json(newUser);
   } catch (error) {
     console.log(error);
@@ -16,7 +28,7 @@ export const createOwner = async (req: Request, res: Response) => {
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
     const allUsers = await Owner.find({
-      order: { createAt: 'DESC' },
+      order: { IsActive: 1, createAt: 'DESC' },
       relations: ['OwnerPets'],
     });
 
