@@ -58,9 +58,7 @@ const Actions = () => {
           <span>pet</span>
         </BaseButton>
       </div>
-      <div className='mb-2'>
-        <BaseInput />
-      </div>
+      <div className='mb-2'>{/* <BaseInput /> */}</div>
       <div className='bg-navy-light rounded-lg py-2 px-4 flex justify-between items-center space-x-4 mb-2'>
         <NavLink
           exact
