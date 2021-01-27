@@ -7,8 +7,10 @@ import { IOwner, IPet } from 'helpers/types';
 import { useModal } from 'hooks/useModal';
 
 import 'assets/styles.css';
-import { OwnerForm, PetForm } from 'components/FormComponents';
+import { DeleteForm, OwnerForm, PetForm } from 'components/FormComponents';
 import { OwnerPetList } from '.';
+import { IoMdClose } from 'react-icons/io';
+import { FiEdit2 } from 'react-icons/fi';
 
 Modal.setAppElement('#root');
 
@@ -68,6 +70,15 @@ const OwnerCard = ({ owner }: IOwnerCard) => {
           isEditting={petEdit}
         />
       );
+    } else if (selectedModal === 'delete') {
+      return (
+        <DeleteForm
+          id={selectedOwner?.OwnerId}
+          type='OWNER'
+          closeModal={closeModal}
+          status={selectedOwner?.IsActive}
+        />
+      );
     } else {
       return null;
     }
@@ -75,14 +86,17 @@ const OwnerCard = ({ owner }: IOwnerCard) => {
 
   return (
     <div
-      className={`transition duration-200 border border-navy-lighter shadow-xl  rounded-lg p-2 flex space-x-4 ${
+      className={`relative group transition duration-200 border border-navy-lighter shadow-xl  rounded-lg p-2 flex space-x-4 ${
         owner.IsActive === 'No' ? 'opacity-30' : 'bg-navy-light'
       }`}
     >
       <div className='bg-gradient-to-tr from-yellow-400 to-fucshia-600 p-1 rounded-xl flex-shrink-0 w-32 h-32'>
         <div className='transform block bg-white p-1 rounded-xl w-full h-full hover:-rotate-6 cursor-pointer'>
           <img
-            onClick={() => onSelectOwner(owner)}
+            onClick={() => {
+              onSelectOwner(owner);
+              setSelectedModal('owner');
+            }}
             className='object-cover object-center rounded-xl w-full h-full'
             src={`https://i.pravatar.cc/150?u=${owner.OwnerId}`}
             alt='dog'
@@ -101,6 +115,25 @@ const OwnerCard = ({ owner }: IOwnerCard) => {
         <p className='font-semibold text-sm text-gray-400 mb-1'>
           {owner.OwnerAddress}, {owner.OwnerCity} - {owner.OwnerZip}
         </p>
+        <div className='hidden group-hover:block absolute right-0 top-0 -mt-3 transform translate-x-2'>
+          <div className='flex items-center space-x-1'>
+            <button
+              onClick={() => onSelectOwner(owner)}
+              className=' flex justify-center items-center text-white bg-green-600 p-1 rounded-full h-8 w-8'
+            >
+              <FiEdit2 className='text-center text-sm' />
+            </button>
+            <button
+              onClick={() => {
+                onSelectOwner(owner);
+                setSelectedModal('delete');
+              }}
+              className=' flex justify-center items-center text-white bg-hot-pink p-1 rounded-full h-8 w-8'
+            >
+              <IoMdClose className='text-center text-sm' />
+            </button>
+          </div>
+        </div>
         <div className='mt-4 border-t border-navy-lighter py-4'>
           <ReactTooltip />
           <OwnerPetList onSelectPet={onSelectPet} owner={owner} />

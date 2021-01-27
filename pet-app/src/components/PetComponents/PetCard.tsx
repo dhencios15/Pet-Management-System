@@ -7,10 +7,10 @@ import {
   formatOwnerName,
   selectBreedByType,
 } from 'helpers/formatDisplay';
-import { IoMdFemale, IoMdMale } from 'react-icons/io';
+import { IoMdFemale, IoMdMale, IoMdClose } from 'react-icons/io';
 import { IPet } from 'helpers/types';
 import { useModal } from 'hooks/useModal';
-import { PetForm } from 'components/FormComponents';
+import { DeleteForm, PetForm } from 'components/FormComponents';
 
 interface IPetCard {
   pet: IPet;
@@ -22,6 +22,7 @@ const PetCard = ({ pet }: IPetCard) => {
   const [petBdate, selectPetBdate] = React.useState<Date>(new Date());
   const [petBreeds, setPetBreeds] = React.useState<string[]>([]);
   const [petEdit, setPetEdit] = React.useState(false);
+  const [selectedModal, setSelectedModal] = React.useState('');
 
   const onSelectPet = (pet: IPet) => {
     setPetEdit(true);
@@ -38,21 +39,49 @@ const PetCard = ({ pet }: IPetCard) => {
   }, []);
 
   const onCloseModal = () => {
-    console.log('hello');
     closeModal();
     setPetEdit(false);
   };
 
+  const FormModal = () => {
+    if (selectedModal === 'delete') {
+      return (
+        <DeleteForm
+          id={selectedPet?.PetID}
+          type='PET'
+          closeModal={onCloseModal}
+          status={selectedPet?.IsActive}
+        />
+      );
+    } else if (selectedModal === 'pet') {
+      return (
+        <PetForm
+          petBreeds={petBreeds}
+          selectedPet={selectedPet}
+          closeModal={onCloseModal}
+          petBdate={petBdate}
+          onSelectType={onSelectType}
+          isEditting={petEdit}
+        />
+      );
+    } else {
+      return null;
+    }
+  };
+
   return (
     <div
-      className={`transition duration-200 transform hover:scale-105 border border-navy-lighter shadow-xl rounded-lg p-2 flex space-x-4 ${
+      className={`relative transition group duration-200 transform hover:scale-105 border border-navy-lighter shadow-xl rounded-lg p-2 flex space-x-4 ${
         pet.IsActive === 'No' ? 'opacity-30' : 'bg-navy-light'
       }`}
     >
       <div className='bg-gradient-to-tr from-yellow-400 to-fucshia-600 p-1 rounded-full flex-shrink-0 w-24 h-24'>
         <div className='transform block bg-white p-1 rounded-full w-full h-full hover:-rotate-6 cursor-pointer'>
           <img
-            onClick={() => onSelectPet(pet)}
+            onClick={() => {
+              onSelectPet(pet);
+              setSelectedModal('pet');
+            }}
             className='object-cover object-center rounded-full w-full h-full'
             src={`${displayPetPicture(pet.PetType, pet.PetID)}`}
             alt='dog'
@@ -84,6 +113,15 @@ const PetCard = ({ pet }: IPetCard) => {
           </h3>
         </div>
       </div>
+      <button
+        onClick={() => {
+          onSelectPet(pet);
+          setSelectedModal('delete');
+        }}
+        className='hidden group-hover:block text-white bg-hot-pink p-1 rounded-full h-5 w-5 absolute right-0 top-0 -mt-3 transform translate-x-2'
+      >
+        <IoMdClose className='text-center text-xs' />
+      </button>
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -92,14 +130,7 @@ const PetCard = ({ pet }: IPetCard) => {
         overlayClassName='myoverlay'
         closeTimeoutMS={500}
       >
-        <PetForm
-          petBreeds={petBreeds}
-          selectedPet={selectedPet}
-          closeModal={onCloseModal}
-          petBdate={petBdate}
-          onSelectType={onSelectType}
-          isEditting={petEdit}
-        />
+        {FormModal()}
       </Modal>
     </div>
   );

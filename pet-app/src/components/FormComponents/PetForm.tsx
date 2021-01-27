@@ -54,7 +54,7 @@ const PetForm = ({
         title: 'Add Success',
         text: 'New Pet Added Successfully',
         icon: 'success',
-        confirmButtonText: 'Cool',
+        confirmButtonText: 'OK',
       });
     }
   }, [mutation.isSuccess, queryClient, closeModal]);
@@ -68,7 +68,7 @@ const PetForm = ({
         title: 'Update Success',
         text: 'Update Success',
         icon: 'success',
-        confirmButtonText: 'Cool',
+        confirmButtonText: 'OK',
       });
     }
   }, [queryClient, closeModal, mutationUpdate.isSuccess]);
@@ -111,7 +111,7 @@ const PetForm = ({
               ))
             )}
           </select>
-          {errors?.PetOwnerID && <p className='text-xs text-hot-pink'>hello</p>}
+          {/* {errors?.PetOwnerID && <p className='text-xs text-hot-pink'>{errors?}</p>} */}
         </div>
         <div className='flex flex-col text-white mx-auto'>
           <label className='font-semibold'>PET NAME</label>
