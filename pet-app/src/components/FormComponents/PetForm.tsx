@@ -52,7 +52,7 @@ const PetForm = ({
       closeModal();
       Swal.fire({
         title: 'Add Success',
-        text: 'New Pet Added Successfully',
+        text: 'New Pet Info has been added',
         icon: 'success',
         confirmButtonText: 'OK',
       });
@@ -66,7 +66,7 @@ const PetForm = ({
       closeModal();
       Swal.fire({
         title: 'Update Success',
-        text: 'Update Success',
+        text: 'Pet record has been updated',
         icon: 'success',
         confirmButtonText: 'OK',
       });

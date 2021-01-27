@@ -46,7 +46,7 @@ const DeleteForm = ({ id = 0, type, closeModal, status }: IDeleteForm) => {
       closeModal();
       Swal.fire({
         title: 'Update Success',
-        text: 'Pet Status Update Successfully',
+        text: 'Pet record has been updated',
         icon: 'success',
         confirmButtonText: 'OK',
       });
@@ -59,7 +59,7 @@ const DeleteForm = ({ id = 0, type, closeModal, status }: IDeleteForm) => {
       closeModal();
       Swal.fire({
         title: 'Update Success',
-        text: 'Owner Status Update Successfully',
+        text: 'Owner record has been updated',
         icon: 'success',
         confirmButtonText: 'OK',
       });

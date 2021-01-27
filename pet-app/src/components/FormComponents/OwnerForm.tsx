@@ -38,7 +38,7 @@ const OwnerForm = ({ selectedOwner, closeModal, isEditting }: IOwnerForm) => {
       closeModal();
       Swal.fire({
         title: 'Update Success',
-        text: 'Update Success',
+        text: 'Pet Owner Info has been updated',
         icon: 'success',
         confirmButtonText: 'Cool',
       });
@@ -51,7 +51,7 @@ const OwnerForm = ({ selectedOwner, closeModal, isEditting }: IOwnerForm) => {
       closeModal();
       Swal.fire({
         title: 'Add Success',
-        text: 'New Owner Added Successfully',
+        text: 'New Owner Info has been added',
         icon: 'success',
         confirmButtonText: 'Cool',
       });
