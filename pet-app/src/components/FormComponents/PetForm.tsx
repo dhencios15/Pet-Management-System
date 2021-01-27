@@ -90,11 +90,14 @@ const PetForm = ({
         <div className='flex flex-col text-white mx-auto'>
           <label className='font-semibold'>OWNER</label>
           <select
-            className='rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black'
+            className={`rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black ${
+              !!errors?.PetOwnerID && 'border-2 border-red-600'
+            }`}
             name='PetOwnerID'
             defaultValue={selectedPet?.PetOwnerID.OwnerId}
             ref={register}
           >
+            <option value=''></option>
             {!!selectedPet?.PetOwnerID.OwnerId ? (
               <option
                 key={selectedPet?.PetOwnerID.OwnerId}
@@ -111,14 +114,19 @@ const PetForm = ({
               ))
             )}
           </select>
-          {/* {errors?.PetOwnerID && <p className='text-xs text-hot-pink'>{errors?}</p>} */}
+          {errors?.PetOwnerID && (
+            <p className='text-xs text-hot-pink'>Please Select Owner</p>
+          )}
         </div>
         <div className='flex flex-col text-white mx-auto'>
           <label className='font-semibold'>PET NAME</label>
           <input
             type='text'
             className={`rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black ${
-              !!errors?.PetName && 'border-2 border-red-600'
+              (!!errors?.PetName ||
+                mutation.isError ||
+                mutationUpdate.isError) &&
+              'border-2 border-red-600'
             }`}
             name='PetName'
             defaultValue={selectedPet?.PetName || ''}
@@ -131,12 +139,15 @@ const PetForm = ({
         <div className='flex flex-col text-white mx-auto'>
           <label className='font-semibold'>PET TYPE</label>
           <select
-            className='rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black'
+            className={`rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black ${
+              !!errors?.PetOwnerID && 'border-2 border-red-600'
+            }`}
             name='PetType'
             defaultValue={selectedPet?.PetType || ''}
             onChange={(e) => onSelectType(e.target.value)}
             ref={register}
           >
+            <option value=''></option>
             {Object.keys(PET_TYPE).map((type) => (
               <option key={type} value={type}>
                 {type}
@@ -150,11 +161,14 @@ const PetForm = ({
         <div className='flex flex-col text-white mx-auto'>
           <label className='font-semibold'>PET BREED</label>
           <select
-            className='rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black'
+            className={`rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black ${
+              !!errors?.PetBreed && 'border-2 border-red-600'
+            }`}
             name='PetBreed'
             defaultValue={selectedPet?.PetBreed || ''}
             ref={register}
           >
+            <option value=''></option>
             {petBreeds.map((breeds) => (
               <option key={breeds} value={breeds}>
                 {breeds}
@@ -169,7 +183,9 @@ const PetForm = ({
           <label className='font-semibold'>PET BIRTHDATE</label>
           <DatePicker
             selected={formatOriginalDate(selectedPet?.PetBdate) || ''}
-            className='rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black'
+            className={`rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black ${
+              !!errors?.PetBdate && 'border-2 border-red-600'
+            }`}
             onChange={(date) => setValue('PetBdate', date)}
             maxDate={new Date()}
             showYearDropdown
@@ -182,11 +198,14 @@ const PetForm = ({
         <div className='flex flex-col text-white mx-auto'>
           <label className='font-semibold'>PET GENDER</label>
           <select
-            className='rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black'
+            className={`rounded-lg py-1 px-2 focus:outline-none mx-auto w-64 text-black ${
+              !!errors?.PetGender && 'border-2 border-red-600'
+            }`}
             name='PetGender'
             defaultValue={selectedPet?.PetGender || ''}
             ref={register}
           >
+            <option value=''></option>
             {GENDER.map((gender) => (
               <option key={gender} value={gender}>
                 {gender}
