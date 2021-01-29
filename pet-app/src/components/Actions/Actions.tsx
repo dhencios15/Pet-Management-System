@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 
 import { useModal } from 'hooks/useModal';
 import { PetForm, OwnerForm } from 'components/FormComponents';
-import { BaseButton, BaseInput } from 'components/SharedComponents';
+import { BaseButton } from 'components/SharedComponents';
 import { selectBreedByType } from 'helpers/formatDisplay';
 
 const Actions = () => {

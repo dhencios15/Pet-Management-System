@@ -5,8 +5,8 @@
    "username": "root",
    "password": "",
    "database": "db_petmanagement_delacruz",
-   "synchronize": false,
-   "logging": false,
+   "synchronize": true,
+   "logging": true,
    "entities": [
       "src/entities/**/*.ts"
    ],

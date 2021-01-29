@@ -19,7 +19,7 @@ export default class Pet extends Entity {
   @PrimaryGeneratedColumn()
   PetID: number;
 
-  @Column({ unique: true })
+  @Column()
   PetName: string;
 
   @Column()

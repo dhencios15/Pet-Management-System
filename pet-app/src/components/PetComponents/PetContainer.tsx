@@ -10,12 +10,25 @@ const PetContainer = () => {
   const [query, setQuery] = React.useState('');
 
   const fuse = new Fuse(data || [], {
-    keys: ['PetName', 'PetType', 'PetBreed'],
+    keys: [
+      {
+        name: 'PetName',
+        weight: 2,
+      },
+    ],
     includeScore: true,
   });
 
   const results = fuse.search(query);
-  const pets = query ? results.map((result) => result.item) : data;
+  const pets = query
+    ? results
+        .filter(({ score, item }) => {
+          let petScore: number = Number(score) * 100;
+          if (petScore < 1) return item;
+          return false;
+        })
+        .map((pet) => pet.item)
+    : data;
 
   return isLoading ? (
     <div className='my-10 flex justify-center items-center'>

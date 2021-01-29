@@ -10,12 +10,21 @@ const OwnerContainer = () => {
   const [query, setQuery] = React.useState('');
 
   const fuse = new Fuse(data || [], {
-    keys: ['OwnerName', 'OwnerEmail'],
+    keys: ['OwnerName'],
     includeScore: true,
   });
 
   const results = fuse.search(query);
-  const owners = query ? results.map((result) => result.item) : data;
+
+  const owners = query
+    ? results
+        .filter(({ score, item }) => {
+          let ownerScore: number = Number(score) * 100;
+          if (ownerScore < 1) return item;
+          return false;
+        })
+        .map((owner) => owner.item)
+    : data;
 
   return isLoading ? (
     <div className='my-10 flex justify-center items-center'>

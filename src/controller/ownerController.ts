@@ -58,9 +58,27 @@ export const updateUser = async (req: Request, res: Response) => {
   try {
     const updatedUser = await Owner.update(userId, { ...req.body });
     console.log(updatedUser);
-    return res.json(updatedUser);
+    return res.json({
+      updatedUser,
+      message: 'User info deleted',
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json(error);
+  }
+};
+
+export const deleteUser = async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  try {
+    const deleteUser = await Owner.delete(userId);
+    console.log(deleteUser);
+    return res.json(deleteUser);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      error,
+      message: 'Owner cannot be deleted because it still has a pet',
+    });
   }
 };
