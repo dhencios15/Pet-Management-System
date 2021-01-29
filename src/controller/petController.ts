@@ -34,13 +34,6 @@ const findPetByOwner = async (
 export const createPet = async (req: Request, res: Response) => {
   const { PetName, PetOwnerID } = req.body;
   try {
-    // let errors: any = {};
-    // const petName = await Pet.findOne({ PetName });
-
-    // if (petName) errors.PetName = 'Petname is already taken';
-    // if (Object.keys(errors).length > 0) {
-    //   return res.status(400).json(errors);
-    // }
     const ownerHasSameNamePet = await findPetByOwner(PetOwnerID, PetName, 0);
     if (ownerHasSameNamePet) {
       return res.status(404).json(`Pet name already taken`);
@@ -86,11 +79,10 @@ export const updatePet = async (req: Request, res: Response) => {
   const { PetOwnerID, PetName } = req.body;
 
   try {
-    const ownerHasSameNamePet = await findPetByOwner(
-      PetOwnerID,
-      PetName,
-      +petId
-    );
+    let ownerHasSameNamePet;
+    if (PetName) {
+      ownerHasSameNamePet = await findPetByOwner(PetOwnerID, PetName, +petId);
+    }
 
     if (ownerHasSameNamePet) {
       return res.status(404).json(`Pet name already taken`);
@@ -108,10 +100,8 @@ export const deletePet = async (req: Request, res: Response) => {
   const { petId } = req.params;
 
   try {
-    const owner = await Owner.findOneOrFail(petId);
-    // const pet = await Pet.delete(petId);
-    console.log(owner);
-    // return res.json(pet);
+    const pet = await Pet.delete(petId);
+    return res.json(pet);
   } catch (error) {
     return res.status(500).json({ error, message: 'Something went wrong' });
   }

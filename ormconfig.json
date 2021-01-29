@@ -6,7 +6,7 @@
    "password": "",
    "database": "db_petmanagement_delacruz",
    "synchronize": true,
-   "logging": true,
+   "logging": false,
    "entities": [
       "src/entities/**/*.ts"
    ],
