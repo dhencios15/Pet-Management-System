@@ -17,6 +17,7 @@ const PetContainer = () => {
       },
     ],
     includeScore: true,
+    ignoreLocation: true,
   });
 
   const results = fuse.search(query);

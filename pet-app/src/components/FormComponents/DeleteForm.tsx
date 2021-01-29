@@ -25,18 +25,30 @@ const DeleteForm = ({ id = 0, type, closeModal, status }: IDeleteForm) => {
     },
   });
 
+  console.log(type);
+
   const mutationPet = useMutation((data: string) =>
     axios.put(`/pets/${id}`, data)
   );
   const mutationOwner = useMutation((data: string) =>
     axios.put(`/owners/${id}`, data)
   );
+  const murationDeletePet = useMutation(() => axios.delete(`/pets/${id}`));
+  const murationDeleteOwner = useMutation(() => axios.delete(`/owners/${id}`));
 
   const onSubmit = (data: any) => {
     if (type === 'PET') {
       mutationPet.mutate(data);
     } else if (type === 'OWNER') {
       mutationOwner.mutate(data);
+    }
+  };
+
+  const onDelete = () => {
+    if (type === 'PET') {
+      murationDeletePet.mutate();
+    } else if (type === 'OWNER') {
+      murationDeleteOwner.mutate();
     }
   };
 
@@ -51,7 +63,22 @@ const DeleteForm = ({ id = 0, type, closeModal, status }: IDeleteForm) => {
         confirmButtonText: 'OK',
       });
     }
-  }, [mutationPet.isSuccess, queryClient, closeModal]);
+    if (murationDeletePet.isSuccess) {
+      queryClient.invalidateQueries('pets');
+      closeModal();
+      Swal.fire({
+        title: 'Delete Success',
+        text: 'Pet record has been deleted',
+        icon: 'success',
+        confirmButtonText: 'OK',
+      });
+    }
+  }, [
+    mutationPet.isSuccess,
+    murationDeletePet.isSuccess,
+    queryClient,
+    closeModal,
+  ]);
 
   React.useEffect(() => {
     if (mutationOwner.isSuccess) {
@@ -64,13 +91,33 @@ const DeleteForm = ({ id = 0, type, closeModal, status }: IDeleteForm) => {
         confirmButtonText: 'OK',
       });
     }
-  }, [mutationOwner.isSuccess, queryClient, closeModal]);
+    if (murationDeleteOwner.isSuccess) {
+      queryClient.invalidateQueries('owners');
+      closeModal();
+      Swal.fire({
+        title: 'Delete Success',
+        text: 'Owner record has been deleted',
+        icon: 'success',
+        confirmButtonText: 'OK',
+      });
+    }
+  }, [
+    mutationOwner.isSuccess,
+    murationDeleteOwner.isSuccess,
+    queryClient,
+    closeModal,
+  ]);
 
   return (
     <>
       <h1 className='text-center text-white font-bold tracking-widest text-xl mb-2'>
         {type.toUpperCase()} DETAILS {id && `ID: ${id}`}
       </h1>
+      {(murationDeletePet.isError || murationDeleteOwner.isError) && (
+        <p className='text-center text-sm text-hot-pink'>
+          {`${type} STILL HAVE A PET, CANNOT BE DELETE!`}
+        </p>
+      )}
       <form
         onSubmit={handleSubmit(onSubmit)}
         className='flex items-center justify-center space-x-4 text-white mx-auto'
@@ -91,8 +138,20 @@ const DeleteForm = ({ id = 0, type, closeModal, status }: IDeleteForm) => {
         )}
       </form>
       <div className='flex justify-center my-4 space-x-4'>
-        <BaseButton handleAction={handleSubmit(onSubmit)}>SAVE</BaseButton>
-        <BaseButton handleAction={closeModal}>Close</BaseButton>
+        <BaseButton
+          className='text-sm w-36'
+          handleAction={handleSubmit(onSubmit)}
+        >
+          UPDATE STATUS
+        </BaseButton>
+      </div>
+      <div className='flex justify-center my-4 space-x-4'>
+        <BaseButton className='w-40 bg-hot-pink' handleAction={onDelete}>
+          DELETE {type}
+        </BaseButton>
+        <BaseButton className='w-40' handleAction={closeModal}>
+          Close
+        </BaseButton>
       </div>
     </>
   );
