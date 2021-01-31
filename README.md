@@ -19,3 +19,11 @@
    f. OwnerMobileNo
    g. OwnerEmail
    h. IsActive (Default: Yes)
+
+TODO:
+[✔] - DELETE PET/OWNER:
+   [✔] - DELETE OWNER
+   [✔] - CANNOT DELETE (OWNER) WHEN STILL HAVE A PET
+   [✔] - DELETE PET
+[✔] - ENABLE TO ADD SAME PETNAME BUT DIFFERENT OWNER
+[✔] - FIX SEARCH

@@ -103,10 +103,7 @@ const PetCard = ({ pet }: IPetCard) => {
           {pet.PetID} | {pet.PetType} | {pet.PetBreed} |{' '}
           {formatDate(pet.PetBdate)}
         </p>
-        <p className='text-gray-400 text-sm mb-2 italic'>
-          " {pet.PetNotes} Lorem ipsum, dolor sit amet consectetur adipisicing
-          elit. "
-        </p>
+        <p className='text-gray-400 text-sm mb-2 italic'>" {pet.PetNotes}. "</p>
         <div className='pt-1 border-t border-navy-lighter h-full flex items-center flex-row-reverse'>
           <h3 className='text-sm font-semibold'>
             {formatOwnerName(pet.PetOwnerID.OwnerName)}
